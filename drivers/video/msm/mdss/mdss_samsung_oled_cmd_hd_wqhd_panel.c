@@ -43,6 +43,10 @@
 
 #include <asm/system_info.h>
 
+#ifdef CONFIG_POWERSUSPEND
+#include <linux/powersuspend.h>
+#endif
+
 #define SMART_ACL
 #define HBM_RE
 #define TEMPERATURE_ELVSS
@@ -2211,6 +2215,10 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 		return -EINVAL;
 	}
 
+#ifdef CONFIG_POWERSUSPEND
+	set_power_suspend_state_pannel_hook(POWER_SUSPEND_INACTIVE);
+#endif
+
 	pr_info("%s : ++\n", __func__);
 
 	ctrl = container_of(pdata, struct mdss_dsi_ctrl_pdata,
@@ -2403,6 +2411,10 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 
 end:
 	pr_info("%s : --\n",__func__);
+#ifdef CONFIG_POWERSUSPEND
+	set_power_suspend_state_pannel_hook(POWER_SUSPEND_ACTIVE);
+#endif
+
 	return 0;
 }
 
